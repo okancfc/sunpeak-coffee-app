@@ -84,6 +84,7 @@ export default function RegisterScreen() {
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 className="flex-1"
+                keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
             >
                 <ScrollView
                     contentContainerStyle={{ flexGrow: 1, paddingHorizontal: 24, paddingTop: 16 }}
@@ -118,6 +119,7 @@ export default function RegisterScreen() {
                                     value={fullName}
                                     onChangeText={setFullName}
                                     autoCapitalize="words"
+                                    style={{ textAlignVertical: 'center', paddingVertical: 0 }}
                                 />
                             </View>
                             {errors.fullName && <Text className="text-xs text-red-500 mt-1.5">{errors.fullName}</Text>}
@@ -137,6 +139,7 @@ export default function RegisterScreen() {
                                     keyboardType="email-address"
                                     autoCapitalize="none"
                                     autoComplete="email"
+                                    style={{ textAlignVertical: 'center', paddingVertical: 0 }}
                                 />
                             </View>
                             {errors.email && <Text className="text-xs text-red-500 mt-1.5">{errors.email}</Text>}
@@ -155,6 +158,7 @@ export default function RegisterScreen() {
                                     onChangeText={setPassword}
                                     secureTextEntry={!showPassword}
                                     autoCapitalize="none"
+                                    style={{ textAlignVertical: 'center', paddingVertical: 0 }}
                                 />
                                 <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
                                     <MaterialIcons
@@ -180,6 +184,7 @@ export default function RegisterScreen() {
                                     onChangeText={setConfirmPassword}
                                     secureTextEntry={!showPassword}
                                     autoCapitalize="none"
+                                    style={{ textAlignVertical: 'center', paddingVertical: 0 }}
                                 />
                             </View>
                             {errors.confirmPassword && <Text className="text-xs text-red-500 mt-1.5">{errors.confirmPassword}</Text>}
@@ -187,17 +192,28 @@ export default function RegisterScreen() {
 
                         {/* Register Button */}
                         <TouchableOpacity
-                            className="flex-row items-center justify-center bg-primary py-4 rounded-xl mt-2"
+                            className={`flex-row items-center justify-center py-4 rounded-xl mt-6 mb-2 ${fullName && email && password && confirmPassword
+                                    ? 'bg-primary'
+                                    : 'bg-gray-200'
+                                }`}
                             onPress={handleRegister}
-                            disabled={isLoading}
+                            disabled={isLoading || !fullName || !email || !password || !confirmPassword}
                             activeOpacity={0.9}
                         >
                             {isLoading ? (
                                 <ActivityIndicator color="#181811" />
                             ) : (
                                 <>
-                                    <Text className="text-base font-bold text-text-main">Kayıt Ol</Text>
-                                    <MaterialIcons name="arrow-forward" size={20} color="#181811" style={{ marginLeft: 8 }} />
+                                    <Text className={`text-base font-bold ${fullName && email && password && confirmPassword
+                                            ? 'text-text-main'
+                                            : 'text-gray-400'
+                                        }`}>Kayıt Ol</Text>
+                                    <MaterialIcons
+                                        name="arrow-forward"
+                                        size={20}
+                                        color={fullName && email && password && confirmPassword ? '#181811' : '#9CA3AF'}
+                                        style={{ marginLeft: 8 }}
+                                    />
                                 </>
                             )}
                         </TouchableOpacity>

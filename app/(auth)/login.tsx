@@ -67,7 +67,7 @@ export default function LoginScreen() {
                     {/* Header */}
                     <View className="items-center mb-10">
                         <View className="w-20 h-20 rounded-full bg-primary-light items-center justify-center mb-6">
-                            <MaterialIcons name="wb-sunny" size={48} color="#f9f506" />
+                            <MaterialIcons name="wb-sunny" size={48} color="#dacc05" />
                         </View>
                         <Text className="text-3xl font-bold text-text-main mb-2">Hoş Geldiniz</Text>
                         <Text className="text-base text-gray-500">Sunpeak Coffee'ye giriş yapın</Text>
@@ -89,6 +89,7 @@ export default function LoginScreen() {
                                     keyboardType="email-address"
                                     autoCapitalize="none"
                                     autoComplete="email"
+                                    style={{ textAlignVertical: 'center', paddingVertical: 0 }}
                                 />
                             </View>
                             {errors.email && <Text className="text-xs text-red-500 mt-1.5">{errors.email}</Text>}
@@ -107,6 +108,7 @@ export default function LoginScreen() {
                                     onChangeText={setPassword}
                                     secureTextEntry={!showPassword}
                                     autoCapitalize="none"
+                                    style={{ textAlignVertical: 'center', paddingVertical: 0 }}
                                 />
                                 <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
                                     <MaterialIcons
