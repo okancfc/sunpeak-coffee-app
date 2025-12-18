@@ -1,59 +1,158 @@
 import React from 'react';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable } from 'react-native';
+import { Tabs } from 'expo-router';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
+import { Colors } from '@/constants/Colors';
+import { BlurView } from 'expo-blur';
 
-import Colors from '@/constants/Colors';
-import { useColorScheme } from '@/components/useColorScheme';
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
+type TabIconName = 'home' | 'stars' | 'account-balance-wallet' | 'person';
 
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
+function TabBarIcon({ name, focused }: { name: TabIconName; focused: boolean }) {
+  return (
+    <MaterialIcons
+      name={name}
+      size={26}
+      color={focused ? Colors.textMain : Colors.gray400}
+      style={focused ? { transform: [{ scale: 1.1 }] } : undefined}
+    />
+  );
+}
+
+function CustomTabBar({ state, descriptors, navigation }: any) {
+  const tabs = [
+    { name: 'index', label: 'Ana Sayfa', icon: 'home' as TabIconName },
+    { name: 'rewards', label: 'Fırsatlar', icon: 'stars' as TabIconName },
+    { name: 'wallet', label: 'Cüzdan', icon: 'account-balance-wallet' as TabIconName },
+    { name: 'profile', label: 'Profil', icon: 'person' as TabIconName },
+  ];
+
+  return (
+    <View style={styles.tabBarContainer}>
+      <View style={styles.tabBar}>
+        {state.routes.map((route: any, index: number) => {
+          const tabInfo = tabs[index];
+          const isFocused = state.index === index;
+
+          const onPress = () => {
+            const event = navigation.emit({
+              type: 'tabPress',
+              target: route.key,
+              canPreventDefault: true,
+            });
+
+            if (!isFocused && !event.defaultPrevented) {
+              navigation.navigate(route.name);
+            }
+          };
+
+          return (
+            <TouchableOpacity
+              key={route.key}
+              style={styles.tabItem}
+              onPress={onPress}
+              activeOpacity={0.7}
+            >
+              {isFocused && <View style={styles.activeIndicator} />}
+              <TabBarIcon name={tabInfo.icon} focused={isFocused} />
+              <Text
+                style={[
+                  styles.tabLabel,
+                  { color: isFocused ? Colors.textMain : Colors.gray400 },
+                ]}
+              >
+                {tabInfo.label}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+    </View>
+  );
 }
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs
+      tabBar={(props) => <CustomTabBar {...props} />}
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
-        headerShown: useClientOnlyValue(false, true),
-      }}>
+        headerShown: false,
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
-          ),
+          title: 'Ana Sayfa',
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="rewards"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Fırsatlar',
+        }}
+      />
+      <Tabs.Screen
+        name="wallet"
+        options={{
+          title: 'Cüzdan',
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Profil',
         }}
       />
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  tabBarContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderTopWidth: 1,
+    borderTopColor: Colors.gray100,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -5 },
+    shadowOpacity: 0.03,
+    shadowRadius: 20,
+    elevation: 10,
+  },
+  tabBar: {
+    flexDirection: 'row',
+    height: 76,
+    paddingHorizontal: 8,
+    paddingBottom: 20,
+    alignItems: 'center',
+    justifyContent: 'space-around',
+  },
+  tabItem: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
+    gap: 4,
+    position: 'relative',
+  },
+  activeIndicator: {
+    position: 'absolute',
+    top: 0,
+    width: 32,
+    height: 3,
+    backgroundColor: Colors.primary,
+    borderBottomLeftRadius: 3,
+    borderBottomRightRadius: 3,
+    shadowColor: Colors.primary,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 8,
+  },
+  tabLabel: {
+    fontSize: 10,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+  },
+});

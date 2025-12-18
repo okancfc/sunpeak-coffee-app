@@ -1,28 +1,29 @@
 {
   "expo": {
-    "name": "sunpeak-coffee-app",
+    "name": "Sunpeak Coffee",
     "slug": "sunpeak-coffee-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "sunpeakcoffeeapp",
-    "userInterfaceStyle": "automatic",
+    "scheme": "sunpeakcoffee",
+    "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/images/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#f9f506"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.sunpeak.coffee"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#f9f506"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "package": "com.sunpeak.coffee"
     },
     "web": {
       "bundler": "metro",

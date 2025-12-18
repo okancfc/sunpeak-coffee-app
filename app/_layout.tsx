@@ -1,58 +1,121 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { Colors } from '@/constants/Colors';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
+import { Stack, useRouter, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
-
-import { useColorScheme } from '@/components/useColorScheme';
+import { StatusBar } from 'expo-status-bar';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { ActivityIndicator, View } from 'react-native';
 
 export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
+  ErrorBoundary
 } from 'expo-router';
 
 export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
+  initialRouteName: 'index',
 };
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+const ONBOARDING_KEY = 'sunpeak_onboarded';
+
+// Context to share onboarding state and setter
+interface OnboardingContextType {
+  isOnboarded: boolean | null;
+  setOnboardingComplete: () => void;
+}
+
+const OnboardingContext = createContext<OnboardingContextType>({
+  isOnboarded: null,
+  setOnboardingComplete: () => { },
+});
+
+export const useOnboarding = () => useContext(OnboardingContext);
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-    ...FontAwesome.font,
   });
+  const [isOnboarded, setIsOnboarded] = useState<boolean | null>(null);
+  const router = useRouter();
+  const segments = useSegments();
 
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
+  const setOnboardingComplete = async () => {
+    try {
+      await AsyncStorage.setItem(ONBOARDING_KEY, 'true');
+      setIsOnboarded(true);
+    } catch (e) {
+      console.error('Error saving onboarding status:', e);
+    }
+  };
+
   useEffect(() => {
     if (error) throw error;
   }, [error]);
 
   useEffect(() => {
-    if (loaded) {
+    const checkOnboarding = async () => {
+      try {
+        const value = await AsyncStorage.getItem(ONBOARDING_KEY);
+        setIsOnboarded(value === 'true');
+      } catch (e) {
+        setIsOnboarded(false);
+      }
+    };
+    checkOnboarding();
+  }, []);
+
+  useEffect(() => {
+    if (loaded && isOnboarded !== null) {
       SplashScreen.hideAsync();
     }
-  }, [loaded]);
+  }, [loaded, isOnboarded]);
 
-  if (!loaded) {
-    return null;
+  useEffect(() => {
+    if (isOnboarded === null || !loaded) return;
+
+    const inTabs = segments[0] === '(tabs)';
+    const inOnboarding = segments[0] === 'onboarding';
+
+    if (!isOnboarded && !inOnboarding) {
+      router.replace('/onboarding');
+    } else if (isOnboarded && inOnboarding) {
+      router.replace('/(tabs)');
+    }
+  }, [isOnboarded, segments, loaded]);
+
+  if (!loaded || isOnboarded === null) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Colors.backgroundLight }}>
+        <ActivityIndicator size="large" color={Colors.primary} />
+      </View>
+    );
   }
 
-  return <RootLayoutNav />;
+  return (
+    <OnboardingContext.Provider value={{ isOnboarded, setOnboardingComplete }}>
+      <RootLayoutNav />
+    </OnboardingContext.Provider>
+  );
 }
 
 function RootLayoutNav() {
-  const colorScheme = useColorScheme();
-
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
+    <ThemeProvider value={DefaultTheme}>
+      <StatusBar style="dark" />
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="onboarding" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+        <Stack.Screen
+          name="stamp-detail"
+          options={{
+            presentation: 'modal',
+            headerShown: false,
+            animation: 'slide_from_bottom'
+          }}
+        />
       </Stack>
     </ThemeProvider>
   );
