@@ -139,7 +139,7 @@ export default function QRCodeScreen() {
                 <View style={styles.statsContainer}>
                     <View style={styles.statItem}>
                         <View style={styles.statIconContainer}>
-                            <MaterialIcons name="local-cafe" size={20} color={Colors.primary} />
+                            <MaterialIcons name="local-cafe" size={20} color={Colors.primaryDark} />
                         </View>
                         <Text style={styles.statValue}>4/6</Text>
                         <Text style={styles.statLabel}>Damga</Text>
@@ -147,7 +147,7 @@ export default function QRCodeScreen() {
                     <View style={styles.statDivider} />
                     <View style={styles.statItem}>
                         <View style={styles.statIconContainer}>
-                            <MaterialIcons name="card-giftcard" size={20} color={Colors.primary} />
+                            <MaterialIcons name="card-giftcard" size={20} color={Colors.primaryDark} />
                         </View>
                         <Text style={styles.statValue}>2</Text>
                         <Text style={styles.statLabel}>Hediye Kaldı</Text>
@@ -155,7 +155,7 @@ export default function QRCodeScreen() {
                     <View style={styles.statDivider} />
                     <View style={styles.statItem}>
                         <View style={styles.statIconContainer}>
-                            <MaterialIcons name="emoji-events" size={20} color={Colors.primary} />
+                            <MaterialIcons name="emoji-events" size={20} color={Colors.primaryDark} />
                         </View>
                         <Text style={styles.statValue}>3</Text>
                         <Text style={styles.statLabel}>Toplam Hediye</Text>
