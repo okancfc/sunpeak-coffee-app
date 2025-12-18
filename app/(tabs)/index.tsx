@@ -1,5 +1,6 @@
 import { Colors } from '@/constants/Colors';
 import { Deal } from '@/constants/Types';
+import { useAuth } from '@/contexts/AuthContext';
 import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
@@ -46,8 +47,19 @@ const deals: Deal[] = [
   },
 ];
 
+// Get greeting based on time of day
+const getGreeting = () => {
+  const hour = new Date().getHours();
+  if (hour < 12) return 'Günaydın';
+  if (hour < 18) return 'İyi günler';
+  return 'İyi akşamlar';
+};
+
 export default function HomeScreen() {
   const router = useRouter();
+  const { profile } = useAuth();
+
+  const firstName = profile?.full_name?.split(' ')[0] || 'Kullanıcı';
 
   const handleOpenStampCard = () => {
     router.push('/stamp-detail');
@@ -80,7 +92,7 @@ export default function HomeScreen() {
       {/* Header */}
       <View style={styles.header}>
         <View>
-          <Text style={styles.greeting}>Günaydın, Yusuf ☀️</Text>
+          <Text style={styles.greeting}>{getGreeting()}, {firstName} ☀️</Text>
           <Text style={styles.subGreeting}>Kahven seni bekliyor.</Text>
         </View>
         <TouchableOpacity style={styles.notificationButton}>

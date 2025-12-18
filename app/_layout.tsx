@@ -1,4 +1,5 @@
 import { Colors } from '@/constants/Colors';
+import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
@@ -38,8 +39,6 @@ export default function RootLayout() {
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
   const [isOnboarded, setIsOnboarded] = useState<boolean | null>(null);
-  const router = useRouter();
-  const segments = useSegments();
 
   const setOnboardingComplete = async () => {
     try {
@@ -72,19 +71,6 @@ export default function RootLayout() {
     }
   }, [loaded, isOnboarded]);
 
-  useEffect(() => {
-    if (isOnboarded === null || !loaded) return;
-
-    const inTabs = segments[0] === '(tabs)';
-    const inOnboarding = segments[0] === 'onboarding';
-
-    if (!isOnboarded && !inOnboarding) {
-      router.replace('/onboarding');
-    } else if (isOnboarded && inOnboarding) {
-      router.replace('/(tabs)');
-    }
-  }, [isOnboarded, segments, loaded]);
-
   if (!loaded || isOnboarded === null) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Colors.backgroundLight }}>
@@ -94,19 +80,52 @@ export default function RootLayout() {
   }
 
   return (
-    <OnboardingContext.Provider value={{ isOnboarded, setOnboardingComplete }}>
-      <RootLayoutNav />
-    </OnboardingContext.Provider>
+    <AuthProvider>
+      <OnboardingContext.Provider value={{ isOnboarded, setOnboardingComplete }}>
+        <RootLayoutNav isOnboarded={isOnboarded} />
+      </OnboardingContext.Provider>
+    </AuthProvider>
   );
 }
 
-function RootLayoutNav() {
+function RootLayoutNav({ isOnboarded }: { isOnboarded: boolean }) {
+  const router = useRouter();
+  const segments = useSegments();
+  const { session, isLoading } = useAuth();
+
+  useEffect(() => {
+    if (isLoading) return;
+
+    const inOnboarding = segments[0] === 'onboarding';
+    const inAuth = segments[0] === '(auth)';
+    const inTabs = segments[0] === '(tabs)';
+
+    // Priority 1: Not onboarded -> go to onboarding
+    if (!isOnboarded && !inOnboarding) {
+      router.replace('/onboarding');
+      return;
+    }
+
+    // Priority 2: Onboarded but not logged in -> go to auth
+    if (isOnboarded && !session && !inAuth && !inOnboarding) {
+      router.replace('/(auth)/login');
+      return;
+    }
+
+    // Priority 3: Logged in -> go to tabs
+    if (isOnboarded && session && (inAuth || inOnboarding)) {
+      router.replace('/(tabs)');
+      return;
+    }
+  }, [isOnboarded, session, segments, isLoading]);
+
   return (
     <ThemeProvider value={DefaultTheme}>
       <StatusBar style="dark" />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="onboarding" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen
           name="stamp-detail"

@@ -1,7 +1,9 @@
 import { Colors } from '@/constants/Colors';
+import { useAuth } from '@/contexts/AuthContext';
 import { MaterialIcons } from '@expo/vector-icons';
 import React, { useEffect, useRef } from 'react';
 import {
+    ActivityIndicator,
     Animated,
     Dimensions,
     Easing,
@@ -15,10 +17,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const { width } = Dimensions.get('window');
 const QR_SIZE = width * 0.6;
 
-// Temsili kullanıcı ID'si - ileride DB'den gelecek
-const TEMP_USER_ID = 'SUNPEAK-USER-12345-ABCDE';
-
 export default function QRCodeScreen() {
+    const { profile, user, isLoading } = useAuth();
     const pulseAnim = useRef(new Animated.Value(1)).current;
     const glowAnim = useRef(new Animated.Value(0)).current;
 
@@ -73,6 +73,17 @@ export default function QRCodeScreen() {
         outputRange: [0.3, 0.6],
     });
 
+    // QR code value - uses user's unique QR code from database
+    const qrValue = profile?.qr_code || `SUNPEAK-${user?.id || 'GUEST'}`;
+
+    if (isLoading) {
+        return (
+            <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color={Colors.primary} />
+            </View>
+        );
+    }
+
     return (
         <SafeAreaView style={styles.container} edges={['top']}>
             {/* Header */}
@@ -88,10 +99,12 @@ export default function QRCodeScreen() {
                 {/* User Info */}
                 <View style={styles.userInfoContainer}>
                     <View style={styles.userAvatar}>
-                        <MaterialIcons name="person" size={28} color={Colors.white} />
+                        <Text style={styles.userAvatarText}>
+                            {profile?.full_name?.charAt(0)?.toUpperCase() || 'U'}
+                        </Text>
                     </View>
                     <View style={styles.userDetails}>
-                        <Text style={styles.userName}>Yusuf</Text>
+                        <Text style={styles.userName}>{profile?.full_name || 'Kullanıcı'}</Text>
                         <Text style={styles.userMembership}>Sunpeak Club Üyesi</Text>
                     </View>
                 </View>
@@ -112,7 +125,7 @@ export default function QRCodeScreen() {
                     >
                         <View style={styles.qrWrapper}>
                             <QRCode
-                                value={TEMP_USER_ID}
+                                value={qrValue}
                                 size={QR_SIZE}
                                 color={Colors.textMain}
                                 backgroundColor={Colors.white}
@@ -141,7 +154,7 @@ export default function QRCodeScreen() {
                         <View style={styles.statIconContainer}>
                             <MaterialIcons name="local-cafe" size={20} color={Colors.primaryDark} />
                         </View>
-                        <Text style={styles.statValue}>4/6</Text>
+                        <Text style={styles.statValue}>{profile?.stamps_collected || 0}/6</Text>
                         <Text style={styles.statLabel}>Damga</Text>
                     </View>
                     <View style={styles.statDivider} />
@@ -149,7 +162,7 @@ export default function QRCodeScreen() {
                         <View style={styles.statIconContainer}>
                             <MaterialIcons name="card-giftcard" size={20} color={Colors.primaryDark} />
                         </View>
-                        <Text style={styles.statValue}>2</Text>
+                        <Text style={styles.statValue}>{Math.max(0, 6 - (profile?.stamps_collected || 0))}</Text>
                         <Text style={styles.statLabel}>Hediye Kaldı</Text>
                     </View>
                     <View style={styles.statDivider} />
@@ -157,7 +170,7 @@ export default function QRCodeScreen() {
                         <View style={styles.statIconContainer}>
                             <MaterialIcons name="emoji-events" size={20} color={Colors.primaryDark} />
                         </View>
-                        <Text style={styles.statValue}>3</Text>
+                        <Text style={styles.statValue}>{profile?.total_rewards || 0}</Text>
                         <Text style={styles.statLabel}>Toplam Hediye</Text>
                     </View>
                 </View>
@@ -169,6 +182,12 @@ export default function QRCodeScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: Colors.backgroundLight,
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
         backgroundColor: Colors.backgroundLight,
     },
     header: {
@@ -212,6 +231,11 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.3,
         shadowRadius: 8,
         elevation: 4,
+    },
+    userAvatarText: {
+        fontSize: 20,
+        fontWeight: '700',
+        color: Colors.textMain,
     },
     userDetails: {
         marginLeft: 12,

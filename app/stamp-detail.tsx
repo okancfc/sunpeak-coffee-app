@@ -214,7 +214,7 @@ export default function StampDetailScreen() {
 
                         <View style={styles.historyItem}>
                             <View style={styles.historyIconContainer}>
-                                <MaterialIcons name="add-circle" size={20} color={Colors.green500} />
+                                <MaterialIcons name="add-circle" size={20} color="#22C55E" />
                             </View>
                             <View style={styles.historyContent}>
                                 <Text style={styles.historyTitle}>Damga Kazanıldı</Text>
@@ -225,7 +225,7 @@ export default function StampDetailScreen() {
 
                         <View style={styles.historyItem}>
                             <View style={styles.historyIconContainer}>
-                                <MaterialIcons name="add-circle" size={20} color={Colors.green500} />
+                                <MaterialIcons name="add-circle" size={20} color="#22C55E" />
                             </View>
                             <View style={styles.historyContent}>
                                 <Text style={styles.historyTitle}>Damga Kazanıldı</Text>
