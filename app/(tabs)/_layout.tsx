@@ -1,11 +1,10 @@
-import React from 'react';
-import { Tabs } from 'expo-router';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
 import { Colors } from '@/constants/Colors';
-import { BlurView } from 'expo-blur';
+import { MaterialIcons } from '@expo/vector-icons';
+import { Tabs } from 'expo-router';
+import React from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-type TabIconName = 'home' | 'stars' | 'account-balance-wallet' | 'person';
+type TabIconName = 'home' | 'stars' | 'qr-code-scanner' | 'person';
 
 function TabBarIcon({ name, focused }: { name: TabIconName; focused: boolean }) {
   return (
@@ -22,7 +21,7 @@ function CustomTabBar({ state, descriptors, navigation }: any) {
   const tabs = [
     { name: 'index', label: 'Ana Sayfa', icon: 'home' as TabIconName },
     { name: 'rewards', label: 'Fırsatlar', icon: 'stars' as TabIconName },
-    { name: 'wallet', label: 'Cüzdan', icon: 'account-balance-wallet' as TabIconName },
+    { name: 'qr-scan', label: 'QR Kodum', icon: 'qr-code-scanner' as TabIconName },
     { name: 'profile', label: 'Profil', icon: 'person' as TabIconName },
   ];
 
@@ -91,9 +90,9 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="wallet"
+        name="qr-scan"
         options={{
-          title: 'Cüzdan',
+          title: 'QR Okut',
         }}
       />
       <Tabs.Screen
@@ -142,10 +141,10 @@ const styles = StyleSheet.create({
     top: 0,
     width: 32,
     height: 3,
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.textMain,
     borderBottomLeftRadius: 3,
     borderBottomRightRadius: 3,
-    shadowColor: Colors.primary,
+    shadowColor: Colors.textMain,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.5,
     shadowRadius: 8,

@@ -142,6 +142,24 @@ export default function HomeScreen() {
           </View>
         </View>
 
+        {/* QR Code Shortcut */}
+        <TouchableOpacity
+          style={styles.qrShortcutContainer}
+          onPress={() => router.push('/(tabs)/qr-scan')}
+          activeOpacity={0.9}
+        >
+          <View style={styles.qrShortcutIcon}>
+            <MaterialIcons name="qr-code-2" size={28} color={Colors.textMain} />
+          </View>
+          <View style={styles.qrShortcutContent}>
+            <Text style={styles.qrShortcutTitle}>Damga Kazanmak İçin</Text>
+            <Text style={styles.qrShortcutSubtitle}>QR Kodumu Göster</Text>
+          </View>
+          <View style={styles.qrShortcutArrow}>
+            <MaterialIcons name="arrow-forward" size={24} color={Colors.gray400} />
+          </View>
+        </TouchableOpacity>
+
         {/* Featured Deal */}
         <View style={styles.sectionContainer}>
           <Text style={styles.sectionTitle}>Öne Çıkan Fırsatlar</Text>
@@ -541,5 +559,57 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: Colors.gray500,
     marginTop: 4,
+  },
+  // QR Shortcut Styles
+  qrShortcutContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Colors.surfaceLight,
+    borderRadius: 16,
+    padding: 16,
+    marginTop: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.04,
+    shadowRadius: 16,
+    elevation: 2,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.8)',
+  },
+  qrShortcutIcon: {
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    backgroundColor: Colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: Colors.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  qrShortcutContent: {
+    flex: 1,
+    marginLeft: 16,
+  },
+  qrShortcutTitle: {
+    fontSize: 12,
+    color: Colors.gray500,
+    fontWeight: '500',
+  },
+  qrShortcutSubtitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: Colors.textMain,
+    marginTop: 2,
+  },
+  qrShortcutArrow: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: Colors.gray100,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
