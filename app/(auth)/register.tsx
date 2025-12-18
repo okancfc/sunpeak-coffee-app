@@ -68,13 +68,8 @@ export default function RegisterScreen() {
         } else {
             Alert.alert(
                 'Kayıt Başarılı! 🎉',
-                'Hesabınız oluşturuldu. Şimdi giriş yapabilirsiniz.',
-                [
-                    {
-                        text: 'Tamam',
-                        onPress: () => router.replace('/(auth)/login'),
-                    },
-                ]
+                'Hesabınız oluşturuldu.',
+                [{ text: 'Tamam' }]
             );
         }
     };
@@ -113,13 +108,13 @@ export default function RegisterScreen() {
                             <View className={`flex-row items-center bg-white rounded-xl px-4 py-3.5 border ${errors.fullName ? 'border-red-500' : 'border-gray-200'}`}>
                                 <MaterialIcons name="person" size={20} color="#9CA3AF" />
                                 <TextInput
-                                    className="flex-1 text-base text-text-main ml-3"
+                                    className="flex-1 text-text-main ml-3"
                                     placeholder="Adınız Soyadınız"
                                     placeholderTextColor="#9CA3AF"
                                     value={fullName}
                                     onChangeText={setFullName}
                                     autoCapitalize="words"
-                                    style={{ textAlignVertical: 'center', paddingVertical: 0 }}
+                                    style={{ height: 24 }}
                                 />
                             </View>
                             {errors.fullName && <Text className="text-xs text-red-500 mt-1.5">{errors.fullName}</Text>}
@@ -131,7 +126,7 @@ export default function RegisterScreen() {
                             <View className={`flex-row items-center bg-white rounded-xl px-4 py-3.5 border ${errors.email ? 'border-red-500' : 'border-gray-200'}`}>
                                 <MaterialIcons name="email" size={20} color="#9CA3AF" />
                                 <TextInput
-                                    className="flex-1 text-base text-text-main ml-3"
+                                    className="flex-1 text-text-main ml-3"
                                     placeholder="ornek@email.com"
                                     placeholderTextColor="#9CA3AF"
                                     value={email}
@@ -139,7 +134,7 @@ export default function RegisterScreen() {
                                     keyboardType="email-address"
                                     autoCapitalize="none"
                                     autoComplete="email"
-                                    style={{ textAlignVertical: 'center', paddingVertical: 0 }}
+                                    style={{ height: 24 }}
                                 />
                             </View>
                             {errors.email && <Text className="text-xs text-red-500 mt-1.5">{errors.email}</Text>}
@@ -151,14 +146,14 @@ export default function RegisterScreen() {
                             <View className={`flex-row items-center bg-white rounded-xl px-4 py-3.5 border ${errors.password ? 'border-red-500' : 'border-gray-200'}`}>
                                 <MaterialIcons name="lock" size={20} color="#9CA3AF" />
                                 <TextInput
-                                    className="flex-1 text-base text-text-main ml-3"
+                                    className="flex-1 text-text-main ml-3"
                                     placeholder="En az 6 karakter"
                                     placeholderTextColor="#9CA3AF"
                                     value={password}
                                     onChangeText={setPassword}
                                     secureTextEntry={!showPassword}
                                     autoCapitalize="none"
-                                    style={{ textAlignVertical: 'center', paddingVertical: 0 }}
+                                    style={{ height: 24 }}
                                 />
                                 <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
                                     <MaterialIcons
@@ -177,14 +172,14 @@ export default function RegisterScreen() {
                             <View className={`flex-row items-center bg-white rounded-xl px-4 py-3.5 border ${errors.confirmPassword ? 'border-red-500' : 'border-gray-200'}`}>
                                 <MaterialIcons name="lock-outline" size={20} color="#9CA3AF" />
                                 <TextInput
-                                    className="flex-1 text-base text-text-main ml-3"
+                                    className="flex-1 text-main ml-3"
                                     placeholder="Şifrenizi tekrar girin"
                                     placeholderTextColor="#9CA3AF"
                                     value={confirmPassword}
                                     onChangeText={setConfirmPassword}
                                     secureTextEntry={!showPassword}
                                     autoCapitalize="none"
-                                    style={{ textAlignVertical: 'center', paddingVertical: 0 }}
+                                    style={{ height: 24 }}
                                 />
                             </View>
                             {errors.confirmPassword && <Text className="text-xs text-red-500 mt-1.5">{errors.confirmPassword}</Text>}
@@ -193,8 +188,8 @@ export default function RegisterScreen() {
                         {/* Register Button */}
                         <TouchableOpacity
                             className={`flex-row items-center justify-center py-4 rounded-xl mt-6 mb-2 ${fullName && email && password && confirmPassword
-                                    ? 'bg-primary'
-                                    : 'bg-gray-200'
+                                ? 'bg-primary'
+                                : 'bg-gray-200'
                                 }`}
                             onPress={handleRegister}
                             disabled={isLoading || !fullName || !email || !password || !confirmPassword}
@@ -205,8 +200,8 @@ export default function RegisterScreen() {
                             ) : (
                                 <>
                                     <Text className={`text-base font-bold ${fullName && email && password && confirmPassword
-                                            ? 'text-text-main'
-                                            : 'text-gray-400'
+                                        ? 'text-text-main'
+                                        : 'text-gray-400'
                                         }`}>Kayıt Ol</Text>
                                     <MaterialIcons
                                         name="arrow-forward"

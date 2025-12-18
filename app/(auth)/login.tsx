@@ -81,7 +81,7 @@ export default function LoginScreen() {
                             <View className={`flex-row items-center bg-white rounded-xl px-4 py-3.5 border ${errors.email ? 'border-red-500' : 'border-gray-200'}`}>
                                 <MaterialIcons name="email" size={20} color="#9CA3AF" />
                                 <TextInput
-                                    className="flex-1 text-base text-text-main ml-3"
+                                    className="flex-1 text-text-main ml-3"
                                     placeholder="ornek@email.com"
                                     placeholderTextColor="#9CA3AF"
                                     value={email}
@@ -89,7 +89,7 @@ export default function LoginScreen() {
                                     keyboardType="email-address"
                                     autoCapitalize="none"
                                     autoComplete="email"
-                                    style={{ textAlignVertical: 'center', paddingVertical: 0 }}
+                                    style={{ height: 24 }}
                                 />
                             </View>
                             {errors.email && <Text className="text-xs text-red-500 mt-1.5">{errors.email}</Text>}
@@ -101,14 +101,14 @@ export default function LoginScreen() {
                             <View className={`flex-row items-center bg-white rounded-xl px-4 py-3.5 border ${errors.password ? 'border-red-500' : 'border-gray-200'}`}>
                                 <MaterialIcons name="lock" size={20} color="#9CA3AF" />
                                 <TextInput
-                                    className="flex-1 text-base text-text-main ml-3"
+                                    className="flex-1 text-text-main ml-3"
                                     placeholder="••••••••"
                                     placeholderTextColor="#9CA3AF"
                                     value={password}
                                     onChangeText={setPassword}
                                     secureTextEntry={!showPassword}
                                     autoCapitalize="none"
-                                    style={{ textAlignVertical: 'center', paddingVertical: 0 }}
+                                    style={{ height: 24 }}
                                 />
                                 <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
                                     <MaterialIcons
