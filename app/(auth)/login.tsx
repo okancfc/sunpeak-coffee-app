@@ -1,4 +1,3 @@
-import { Colors } from '@/constants/Colors';
 import { useAuth } from '@/contexts/AuthContext';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -9,7 +8,6 @@ import {
     KeyboardAvoidingView,
     Platform,
     ScrollView,
-    StyleSheet,
     Text,
     TextInput,
     TouchableOpacity,
@@ -56,36 +54,36 @@ export default function LoginScreen() {
     };
 
     return (
-        <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
+        <SafeAreaView className="flex-1 bg-bg-light" edges={['top', 'bottom']}>
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                style={styles.keyboardView}
+                className="flex-1"
             >
                 <ScrollView
-                    contentContainerStyle={styles.scrollContent}
+                    contentContainerStyle={{ flexGrow: 1, paddingHorizontal: 24, justifyContent: 'center' }}
                     keyboardShouldPersistTaps="handled"
                     showsVerticalScrollIndicator={false}
                 >
                     {/* Header */}
-                    <View style={styles.header}>
-                        <View style={styles.logoContainer}>
-                            <MaterialIcons name="wb-sunny" size={48} color={Colors.primary} />
+                    <View className="items-center mb-10">
+                        <View className="w-20 h-20 rounded-full bg-primary-light items-center justify-center mb-6">
+                            <MaterialIcons name="wb-sunny" size={48} color="#f9f506" />
                         </View>
-                        <Text style={styles.title}>Hoş Geldiniz</Text>
-                        <Text style={styles.subtitle}>Sunpeak Coffee'ye giriş yapın</Text>
+                        <Text className="text-3xl font-bold text-text-main mb-2">Hoş Geldiniz</Text>
+                        <Text className="text-base text-gray-500">Sunpeak Coffee'ye giriş yapın</Text>
                     </View>
 
                     {/* Form */}
-                    <View style={styles.form}>
+                    <View className="mb-8">
                         {/* Email Input */}
-                        <View style={styles.inputContainer}>
-                            <Text style={styles.inputLabel}>E-posta</Text>
-                            <View style={[styles.inputWrapper, errors.email && styles.inputError]}>
-                                <MaterialIcons name="email" size={20} color={Colors.gray400} />
+                        <View className="mb-5">
+                            <Text className="text-sm font-semibold text-text-main mb-2">E-posta</Text>
+                            <View className={`flex-row items-center bg-white rounded-xl px-4 py-3.5 border ${errors.email ? 'border-red-500' : 'border-gray-200'}`}>
+                                <MaterialIcons name="email" size={20} color="#9CA3AF" />
                                 <TextInput
-                                    style={styles.input}
+                                    className="flex-1 text-base text-text-main ml-3"
                                     placeholder="ornek@email.com"
-                                    placeholderTextColor={Colors.gray400}
+                                    placeholderTextColor="#9CA3AF"
                                     value={email}
                                     onChangeText={setEmail}
                                     keyboardType="email-address"
@@ -93,18 +91,18 @@ export default function LoginScreen() {
                                     autoComplete="email"
                                 />
                             </View>
-                            {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
+                            {errors.email && <Text className="text-xs text-red-500 mt-1.5">{errors.email}</Text>}
                         </View>
 
                         {/* Password Input */}
-                        <View style={styles.inputContainer}>
-                            <Text style={styles.inputLabel}>Şifre</Text>
-                            <View style={[styles.inputWrapper, errors.password && styles.inputError]}>
-                                <MaterialIcons name="lock" size={20} color={Colors.gray400} />
+                        <View className="mb-5">
+                            <Text className="text-sm font-semibold text-text-main mb-2">Şifre</Text>
+                            <View className={`flex-row items-center bg-white rounded-xl px-4 py-3.5 border ${errors.password ? 'border-red-500' : 'border-gray-200'}`}>
+                                <MaterialIcons name="lock" size={20} color="#9CA3AF" />
                                 <TextInput
-                                    style={styles.input}
+                                    className="flex-1 text-base text-text-main ml-3"
                                     placeholder="••••••••"
-                                    placeholderTextColor={Colors.gray400}
+                                    placeholderTextColor="#9CA3AF"
                                     value={password}
                                     onChangeText={setPassword}
                                     secureTextEntry={!showPassword}
@@ -114,36 +112,36 @@ export default function LoginScreen() {
                                     <MaterialIcons
                                         name={showPassword ? 'visibility' : 'visibility-off'}
                                         size={20}
-                                        color={Colors.gray400}
+                                        color="#9CA3AF"
                                     />
                                 </TouchableOpacity>
                             </View>
-                            {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
+                            {errors.password && <Text className="text-xs text-red-500 mt-1.5">{errors.password}</Text>}
                         </View>
 
                         {/* Login Button */}
                         <TouchableOpacity
-                            style={styles.loginButton}
+                            className="flex-row items-center justify-center bg-primary py-4 rounded-xl mt-2"
                             onPress={handleLogin}
                             disabled={isLoading}
                             activeOpacity={0.9}
                         >
                             {isLoading ? (
-                                <ActivityIndicator color={Colors.textMain} />
+                                <ActivityIndicator color="#181811" />
                             ) : (
                                 <>
-                                    <Text style={styles.loginButtonText}>Giriş Yap</Text>
-                                    <MaterialIcons name="arrow-forward" size={20} color={Colors.textMain} />
+                                    <Text className="text-base font-bold text-text-main">Giriş Yap</Text>
+                                    <MaterialIcons name="arrow-forward" size={20} color="#181811" style={{ marginLeft: 8 }} />
                                 </>
                             )}
                         </TouchableOpacity>
                     </View>
 
                     {/* Register Link */}
-                    <View style={styles.footer}>
-                        <Text style={styles.footerText}>Hesabınız yok mu?</Text>
+                    <View className="flex-row justify-center items-center">
+                        <Text className="text-sm text-gray-500">Hesabınız yok mu?</Text>
                         <TouchableOpacity onPress={() => router.push('/(auth)/register')}>
-                            <Text style={styles.registerLink}>Kayıt Ol</Text>
+                            <Text className="text-sm font-bold text-text-main ml-2">Kayıt Ol</Text>
                         </TouchableOpacity>
                     </View>
                 </ScrollView>
@@ -151,117 +149,3 @@ export default function LoginScreen() {
         </SafeAreaView>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: Colors.backgroundLight,
-    },
-    keyboardView: {
-        flex: 1,
-    },
-    scrollContent: {
-        flexGrow: 1,
-        paddingHorizontal: 24,
-        justifyContent: 'center',
-    },
-    header: {
-        alignItems: 'center',
-        marginBottom: 40,
-    },
-    logoContainer: {
-        width: 80,
-        height: 80,
-        borderRadius: 40,
-        backgroundColor: Colors.primaryLight,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: 24,
-        shadowColor: Colors.primary,
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.2,
-        shadowRadius: 12,
-        elevation: 4,
-    },
-    title: {
-        fontSize: 28,
-        fontWeight: '700',
-        color: Colors.textMain,
-        marginBottom: 8,
-    },
-    subtitle: {
-        fontSize: 16,
-        color: Colors.gray500,
-    },
-    form: {
-        marginBottom: 32,
-    },
-    inputContainer: {
-        marginBottom: 20,
-    },
-    inputLabel: {
-        fontSize: 14,
-        fontWeight: '600',
-        color: Colors.textMain,
-        marginBottom: 8,
-    },
-    inputWrapper: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: Colors.white,
-        borderRadius: 12,
-        paddingHorizontal: 16,
-        paddingVertical: 14,
-        borderWidth: 1,
-        borderColor: Colors.gray200,
-        gap: 12,
-    },
-    inputError: {
-        borderColor: Colors.red500,
-    },
-    input: {
-        flex: 1,
-        fontSize: 16,
-        color: Colors.textMain,
-    },
-    errorText: {
-        fontSize: 12,
-        color: Colors.red500,
-        marginTop: 6,
-    },
-    loginButton: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: Colors.primary,
-        paddingVertical: 16,
-        borderRadius: 12,
-        gap: 8,
-        marginTop: 8,
-        shadowColor: Colors.primary,
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 8,
-        elevation: 4,
-    },
-    loginButtonText: {
-        fontSize: 16,
-        fontWeight: '700',
-        color: Colors.textMain,
-    },
-    footer: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: 8,
-    },
-    footerText: {
-        fontSize: 14,
-        color: Colors.gray500,
-    },
-    registerLink: {
-        fontSize: 14,
-        fontWeight: '700',
-        color: Colors.textMain,
-    },
-});

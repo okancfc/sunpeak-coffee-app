@@ -1,11 +1,9 @@
-import { Colors } from '@/constants/Colors';
 import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useRef } from 'react';
 import {
     Animated,
-    Dimensions,
     ScrollView,
     StyleSheet,
     Text,
@@ -13,8 +11,6 @@ import {
     View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-const { width } = Dimensions.get('window');
 
 export default function StampDetailScreen() {
     const router = useRouter();
@@ -48,7 +44,8 @@ export default function StampDetailScreen() {
     };
 
     const handleShowQR = () => {
-        router.push('/(tabs)/qr-scan');
+        // Modal'ı kapat ve QR ekranına git
+        router.replace('/(tabs)/qr-scan');
     };
 
     // Stamp data - 4 filled, 2 empty, 1 gift
@@ -65,110 +62,109 @@ export default function StampDetailScreen() {
     const renderStamp = (stamp: { filled: boolean; isGift?: boolean }, index: number) => {
         if (stamp.isGift) {
             return (
-                <View key={index} style={styles.stampGift}>
-                    <MaterialIcons name="card-giftcard" size={24} color={Colors.primaryDark} />
-                    <Text style={styles.stampGiftLabel}>HEDİYE</Text>
+                <View key={index} className="w-12 h-14 items-center justify-center">
+                    <MaterialIcons name="card-giftcard" size={24} color="#dacc05" />
+                    <Text className="text-[8px] font-bold text-primary-dark mt-0.5">HEDİYE</Text>
                 </View>
             );
         }
 
         if (stamp.filled) {
             return (
-                <View key={index} style={styles.stampFilled}>
-                    <MaterialIcons name="check" size={22} color={Colors.textMain} />
+                <View key={index} className="w-12 h-12 rounded-full bg-primary items-center justify-center">
+                    <MaterialIcons name="check" size={22} color="#181811" />
                 </View>
             );
         }
 
         return (
-            <View key={index} style={styles.stampEmpty}>
-                <MaterialIcons name="local-cafe" size={20} color={Colors.gray300} />
+            <View key={index} className="w-12 h-12 rounded-full bg-gray-100 items-center justify-center border border-dashed border-gray-300">
+                <MaterialIcons name="local-cafe" size={20} color="#E0E0E0" />
             </View>
         );
     };
 
     return (
-        <View style={styles.container}>
+        <View className="flex-1 bg-bg-light">
             {/* Background Gradient */}
             <LinearGradient
-                colors={[Colors.primaryLight, Colors.backgroundLight, Colors.backgroundLight]}
-                style={styles.backgroundGradient}
+                colors={['rgba(249, 245, 6, 0.3)', '#f8f8f5', '#f8f8f5']}
+                style={StyleSheet.absoluteFillObject}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
             />
 
-            <SafeAreaView style={styles.safeArea} edges={['top']}>
+            <SafeAreaView className="flex-1" edges={['top']}>
                 {/* Header */}
-                <View style={styles.header}>
-                    <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-                        <MaterialIcons name="close" size={24} color={Colors.textMain} />
+                <View className="flex-row items-center shadow-lg shadow-black/10 justify-between px-5 py-4">
+                    <TouchableOpacity
+                        className="w-10 h-10 rounded-full bg-white items-center justify-center border border-gray-100"
+                        onPress={handleBack}
+                    >
+                        <MaterialIcons name="close" size={24} color="#181811" />
                     </TouchableOpacity>
-                    <Text style={styles.headerTitle}>Sadakat Kartım</Text>
-                    <View style={{ width: 40 }} />
+                    <Text className="text-lg font-bold text-text-main">Sadakat Kartım</Text>
+                    <View className="w-10" />
                 </View>
 
                 <ScrollView
-                    style={styles.scrollView}
-                    contentContainerStyle={styles.scrollContent}
+                    className="flex-1"
+                    contentContainerStyle={{ padding: 20, paddingBottom: 100 }}
                     showsVerticalScrollIndicator={false}
                 >
                     {/* Stamp Card */}
                     <Animated.View
-                        style={[
-                            styles.stampCard,
-                            {
-                                opacity: fadeAnim,
-                                transform: [
-                                    { translateY: slideAnim },
-                                    { scale: scaleAnim }
-                                ],
-                            }
-                        ]}
+                        style={{
+                            opacity: fadeAnim,
+                            transform: [
+                                { translateY: slideAnim },
+                                { scale: scaleAnim }
+                            ],
+                        }}
+                        className="bg-white rounded-3xl p-6 border border-gray-100 mb-4"
                     >
                         {/* Card Header */}
-                        <View style={styles.cardHeader}>
+                        <View className="flex-row justify-between items-center mb-6">
                             <View>
-                                <Text style={styles.cardTitle}>Sunpeak Club</Text>
-                                <Text style={styles.cardSubtitle}>HEDİYE KAHVE PROGRAMI</Text>
+                                <Text className="text-xl font-bold text-text-main">Sunpeak Club</Text>
+                                <Text className="text-xs text-gray-400 tracking-wider mt-0.5">HEDİYE KAHVE PROGRAMI</Text>
                             </View>
-                            <View style={styles.cardBadge}>
-                                <MaterialIcons name="local-cafe" size={18} color={Colors.textMain} />
+                            <View className="w-10 h-10 rounded-full bg-primary items-center justify-center">
+                                <MaterialIcons name="local-cafe" size={18} color="#181811" />
                             </View>
                         </View>
 
                         {/* Progress Text */}
-                        <View style={styles.progressHeader}>
-                            <Text style={styles.progressTitle}>4/6 Tamamlandı</Text>
-                            <Text style={styles.progressSubtitle}>2 kahve sonra hediye! 🎉</Text>
+                        <View className="mb-5">
+                            <Text className="text-2xl font-bold text-text-main">4/6 Tamamlandı</Text>
+                            <Text className="text-sm text-gray-500 mt-1">2 kahve sonra hediye! 🎉</Text>
                         </View>
 
                         {/* Stamps Grid */}
-                        <View style={styles.stampsGrid}>
+                        <View className="flex-row justify-between mb-5">
                             {stamps.map((stamp, index) => renderStamp(stamp, index))}
                         </View>
 
                         {/* Progress Bar */}
-                        <View style={styles.progressBarContainer}>
-                            <View style={[styles.progressBar, { width: '66%' }]} />
+                        <View className="h-1.5 bg-gray-100 rounded-full">
+                            <View className="h-full bg-primary rounded-full" style={{ width: '66%' }} />
                         </View>
                     </Animated.View>
 
                     {/* Info Card */}
                     <Animated.View
-                        style={[
-                            styles.infoCard,
-                            {
-                                opacity: fadeAnim,
-                                transform: [{ translateY: slideAnim }],
-                            }
-                        ]}
+                        style={{
+                            opacity: fadeAnim,
+                            transform: [{ translateY: slideAnim }],
+                        }}
+                        className="flex-row bg-white rounded-2xl p-4 mb-4"
                     >
-                        <View style={styles.infoIconContainer}>
-                            <MaterialIcons name="info-outline" size={24} color={Colors.primaryDark} />
+                        <View className="w-12 h-12 rounded-full bg-primary/30 items-center justify-center">
+                            <MaterialIcons name="info-outline" size={24} color="#dacc05" />
                         </View>
-                        <View style={styles.infoContent}>
-                            <Text style={styles.infoTitle}>Nasıl Çalışır?</Text>
-                            <Text style={styles.infoText}>
+                        <View className="flex-1 ml-4">
+                            <Text className="text-lg font-bold text-text-main mb-1">Nasıl Çalışır?</Text>
+                            <Text className="text-md text-gray-600/60 leading-5">
                                 6 kahve al, 7. kahve hediye! Her alışverişte QR kodunuzu okutun ve damga kazanın.
                             </Text>
                         </View>
@@ -176,350 +172,68 @@ export default function StampDetailScreen() {
 
                     {/* QR Button */}
                     <Animated.View
-                        style={[
-                            styles.qrButtonContainer,
-                            {
-                                opacity: fadeAnim,
-                                transform: [{ translateY: slideAnim }],
-                            }
-                        ]}
+                        style={{
+                            opacity: fadeAnim,
+                            transform: [{ translateY: slideAnim }],
+                        }}
                     >
                         <TouchableOpacity
-                            style={styles.qrButton}
+                            className="flex-row items-center bg-primary p-4 rounded-2xl"
                             onPress={handleShowQR}
                             activeOpacity={0.9}
                         >
-                            <View style={styles.qrButtonIcon}>
-                                <MaterialIcons name="qr-code-2" size={28} color={Colors.textMain} />
+                            <View className="w-16 h-16 rounded-xl bg-white/30 items-center justify-center">
+                                <MaterialIcons name="qr-code-2" size={28} color="#181811" />
                             </View>
-                            <View style={styles.qrButtonContent}>
-                                <Text style={styles.qrButtonTitle}>QR Kodumu Göster</Text>
-                                <Text style={styles.qrButtonSubtitle}>Kasada okutarak damga kazan</Text>
+                            <View className="flex-1 ml-6">
+                                <Text className="text-xl font-bold text-text-main">QR Kodumu Göster</Text>
+                                <Text className="text-md text-text-main/60 mt-0.5">Kasada okutarak damga kazan</Text>
                             </View>
-                            <MaterialIcons name="arrow-forward-ios" size={18} color={Colors.textMain} />
+                            <MaterialIcons name="arrow-forward-ios" size={18} color="#181811" />
                         </TouchableOpacity>
                     </Animated.View>
 
-                    {/* History Section */}
-                    <Animated.View
-                        style={[
-                            styles.historySection,
-                            {
-                                opacity: fadeAnim,
-                                transform: [{ translateY: slideAnim }],
-                            }
-                        ]}
-                    >
-                        <Text style={styles.sectionTitle}>Son Aktiviteler</Text>
+                    {/* Activity History */}
+                    <View className="mt-6">
+                        <Text className="text-lg font-bold text-text-main mb-4">Son Aktiviteler</Text>
 
-                        <View style={styles.historyItem}>
-                            <View style={styles.historyIconContainer}>
-                                <MaterialIcons name="add-circle" size={20} color="#22C55E" />
+                        <View className="bg-white rounded-2xl overflow-hidden border border-gray-100">
+                            <View className="flex-row items-center p-4 border-b border-gray-100">
+                                <View className="w-10 h-10 rounded-full bg-green-50 items-center justify-center">
+                                    <MaterialIcons name="add-circle" size={20} color="#22C55E" />
+                                </View>
+                                <View className="flex-1 ml-3">
+                                    <Text className="text-sm font-semibold text-text-main">Damga Kazanıldı</Text>
+                                    <Text className="text-xs text-gray-500 mt-0.5">Bugün, 14:30</Text>
+                                </View>
+                                <Text className="text-sm font-bold text-green-500">+1</Text>
                             </View>
-                            <View style={styles.historyContent}>
-                                <Text style={styles.historyTitle}>Damga Kazanıldı</Text>
-                                <Text style={styles.historySubtitle}>Latte - Kadıköy Şube</Text>
-                            </View>
-                            <Text style={styles.historyTime}>Bugün</Text>
-                        </View>
 
-                        <View style={styles.historyItem}>
-                            <View style={styles.historyIconContainer}>
-                                <MaterialIcons name="add-circle" size={20} color="#22C55E" />
+                            <View className="flex-row items-center p-4 border-b border-gray-100">
+                                <View className="w-10 h-10 rounded-full bg-green-50 items-center justify-center">
+                                    <MaterialIcons name="add-circle" size={20} color="#22C55E" />
+                                </View>
+                                <View className="flex-1 ml-3">
+                                    <Text className="text-sm font-semibold text-text-main">Damga Kazanıldı</Text>
+                                    <Text className="text-xs text-gray-500 mt-0.5">Dün, 09:15</Text>
+                                </View>
+                                <Text className="text-sm font-bold text-green-500">+1</Text>
                             </View>
-                            <View style={styles.historyContent}>
-                                <Text style={styles.historyTitle}>Damga Kazanıldı</Text>
-                                <Text style={styles.historySubtitle}>Cappuccino - Beşiktaş Şube</Text>
-                            </View>
-                            <Text style={styles.historyTime}>Dün</Text>
-                        </View>
 
-                        <View style={styles.historyItem}>
-                            <View style={[styles.historyIconContainer, { backgroundColor: Colors.primaryLight }]}>
-                                <MaterialIcons name="card-giftcard" size={20} color={Colors.primary} />
+                            <View className="flex-row items-center p-4">
+                                <View className="w-10 h-10 rounded-full bg-purple-50 items-center justify-center">
+                                    <MaterialIcons name="card-giftcard" size={20} color="#8B5CF6" />
+                                </View>
+                                <View className="flex-1 ml-3">
+                                    <Text className="text-sm font-semibold text-text-main">Hediye Kullanıldı</Text>
+                                    <Text className="text-xs text-gray-500 mt-0.5">12 Aralık, 11:45</Text>
+                                </View>
+                                <Text className="text-sm font-bold text-purple-500">🎁</Text>
                             </View>
-                            <View style={styles.historyContent}>
-                                <Text style={styles.historyTitle}>Hediye Kullanıldı</Text>
-                                <Text style={styles.historySubtitle}>Ücretsiz Latte</Text>
-                            </View>
-                            <Text style={styles.historyTime}>3 gün önce</Text>
                         </View>
-                    </Animated.View>
+                    </View>
                 </ScrollView>
             </SafeAreaView>
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: Colors.backgroundLight,
-    },
-    backgroundGradient: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        height: '50%',
-    },
-    safeArea: {
-        flex: 1,
-    },
-    header: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: 20,
-        paddingVertical: 16,
-    },
-    backButton: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        backgroundColor: Colors.white,
-        alignItems: 'center',
-        justifyContent: 'center',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 8,
-        elevation: 3,
-    },
-    headerTitle: {
-        fontSize: 18,
-        fontWeight: '700',
-        color: Colors.textMain,
-    },
-    scrollView: {
-        flex: 1,
-    },
-    scrollContent: {
-        padding: 20,
-        paddingBottom: 100,
-    },
-    // Stamp Card
-    stampCard: {
-        backgroundColor: Colors.white,
-        borderRadius: 24,
-        padding: 24,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 12 },
-        shadowOpacity: 0.08,
-        shadowRadius: 24,
-        elevation: 8,
-        marginBottom: 16,
-    },
-    cardHeader: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 20,
-    },
-    cardTitle: {
-        fontSize: 22,
-        fontWeight: '700',
-        color: Colors.textMain,
-    },
-    cardSubtitle: {
-        fontSize: 11,
-        fontWeight: '600',
-        color: Colors.gray400,
-        letterSpacing: 0.5,
-        marginTop: 4,
-    },
-    cardBadge: {
-        width: 44,
-        height: 44,
-        borderRadius: 22,
-        backgroundColor: Colors.primary,
-        alignItems: 'center',
-        justifyContent: 'center',
-        shadowColor: Colors.primary,
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 8,
-        elevation: 4,
-    },
-    progressHeader: {
-        alignItems: 'center',
-        marginBottom: 24,
-    },
-    progressTitle: {
-        fontSize: 28,
-        fontWeight: '700',
-        color: Colors.textMain,
-    },
-    progressSubtitle: {
-        fontSize: 16,
-        color: Colors.gray500,
-        marginTop: 4,
-    },
-    stampsGrid: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-end',
-        marginBottom: 20,
-        paddingHorizontal: 4,
-    },
-    stampFilled: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        backgroundColor: Colors.primary,
-        alignItems: 'center',
-        justifyContent: 'center',
-        shadowColor: Colors.primary,
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.3,
-        shadowRadius: 4,
-        elevation: 2,
-    },
-    stampEmpty: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        backgroundColor: Colors.gray100,
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderWidth: 2,
-        borderStyle: 'dashed',
-        borderColor: Colors.gray200,
-    },
-    stampGift: {
-        alignItems: 'center',
-    },
-    stampGiftLabel: {
-        fontSize: 8,
-        fontWeight: '700',
-        color: Colors.primaryDark,
-        marginTop: 4,
-    },
-    progressBarContainer: {
-        height: 8,
-        backgroundColor: Colors.gray100,
-        borderRadius: 4,
-        overflow: 'hidden',
-    },
-    progressBar: {
-        height: '100%',
-        backgroundColor: Colors.primary,
-        borderRadius: 4,
-    },
-    // Info Card
-    infoCard: {
-        flexDirection: 'row',
-        backgroundColor: Colors.surfaceLight,
-        borderRadius: 16,
-        padding: 16,
-        marginBottom: 16,
-        alignItems: 'center',
-    },
-    infoIconContainer: {
-        width: 48,
-        height: 48,
-        borderRadius: 24,
-        backgroundColor: Colors.primaryLight,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    infoContent: {
-        flex: 1,
-        marginLeft: 16,
-    },
-    infoTitle: {
-        fontSize: 16,
-        fontWeight: '700',
-        color: Colors.textMain,
-    },
-    infoText: {
-        fontSize: 14,
-        color: Colors.gray500,
-        marginTop: 4,
-        lineHeight: 20,
-    },
-    // QR Button
-    qrButtonContainer: {
-        marginBottom: 24,
-    },
-    qrButton: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: Colors.primary,
-        borderRadius: 16,
-        padding: 16,
-        shadowColor: Colors.primary,
-        shadowOffset: { width: 0, height: 6 },
-        shadowOpacity: 0.3,
-        shadowRadius: 12,
-        elevation: 5,
-    },
-    qrButtonIcon: {
-        width: 52,
-        height: 52,
-        borderRadius: 26,
-        backgroundColor: 'rgba(255, 255, 255, 0.2)',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    qrButtonContent: {
-        flex: 1,
-        marginLeft: 16,
-    },
-    qrButtonTitle: {
-        fontSize: 18,
-        fontWeight: '700',
-        color: Colors.textMain,
-    },
-    qrButtonSubtitle: {
-        fontSize: 13,
-        color: Colors.textMain,
-        opacity: 0.7,
-        marginTop: 2,
-    },
-    // History Section
-    historySection: {
-        backgroundColor: Colors.surfaceLight,
-        borderRadius: 20,
-        padding: 20,
-    },
-    sectionTitle: {
-        fontSize: 18,
-        fontWeight: '700',
-        color: Colors.textMain,
-        marginBottom: 16,
-    },
-    historyItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingVertical: 12,
-        borderBottomWidth: 1,
-        borderBottomColor: Colors.gray100,
-    },
-    historyIconContainer: {
-        width: 36,
-        height: 36,
-        borderRadius: 18,
-        backgroundColor: 'rgba(34, 197, 94, 0.1)',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    historyContent: {
-        flex: 1,
-        marginLeft: 12,
-    },
-    historyTitle: {
-        fontSize: 14,
-        fontWeight: '600',
-        color: Colors.textMain,
-    },
-    historySubtitle: {
-        fontSize: 12,
-        color: Colors.gray500,
-        marginTop: 2,
-    },
-    historyTime: {
-        fontSize: 12,
-        color: Colors.gray400,
-    },
-});

@@ -1,4 +1,3 @@
-import { Colors } from '@/constants/Colors';
 import { Deal } from '@/constants/Types';
 import { useAuth } from '@/contexts/AuthContext';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -17,6 +16,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const { width } = Dimensions.get('window');
+const CARD_WIDTH = (width - 60) / 2;
 
 const deals: Deal[] = [
   {
@@ -47,7 +47,6 @@ const deals: Deal[] = [
   },
 ];
 
-// Get greeting based on time of day
 const getGreeting = () => {
   const hour = new Date().getHours();
   if (hour < 12) return 'Günaydın';
@@ -58,125 +57,104 @@ const getGreeting = () => {
 export default function HomeScreen() {
   const router = useRouter();
   const { profile } = useAuth();
-
   const firstName = profile?.full_name?.split(' ')[0] || 'Kullanıcı';
 
   const handleOpenStampCard = () => {
     router.push('/stamp-detail');
   };
 
-  const renderStampIcon = (filled: boolean, isGift: boolean = false) => {
-    if (isGift) {
-      return (
-        <View style={styles.stampEmpty}>
-          <MaterialIcons name="card-giftcard" size={20} color={Colors.gray300} />
-        </View>
-      );
-    }
-    if (filled) {
-      return (
-        <View style={styles.stampFilled}>
-          <MaterialIcons name="local-cafe" size={20} color={Colors.textMain} />
-        </View>
-      );
-    }
-    return (
-      <View style={styles.stampEmpty}>
-        <MaterialIcons name="local-cafe" size={20} color={Colors.gray300} />
-      </View>
-    );
-  };
-
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <SafeAreaView className="flex-1 bg-bg-light" edges={['top']}>
       {/* Header */}
-      <View style={styles.header}>
+      <View className="flex-row justify-between items-center px-5 py-4">
         <View>
-          <Text style={styles.greeting}>{getGreeting()}, {firstName} ☀️</Text>
-          <Text style={styles.subGreeting}>Kahven seni bekliyor.</Text>
+          <Text className="text-2xl font-bold text-text-main">{getGreeting()}, {firstName} ☀️</Text>
+          <Text className="text-sm text-gray-500 mt-1">Kahven seni bekliyor.</Text>
         </View>
-        <TouchableOpacity style={styles.notificationButton}>
-          <MaterialIcons name="notifications" size={24} color={Colors.textMain} />
-          <View style={styles.notificationBadge} />
+        <TouchableOpacity className="relative w-11 h-11 rounded-full bg-white items-center justify-center">
+          <MaterialIcons name="notifications" size={24} color="#181811" />
+          <View className="absolute top-2 right-2 w-2.5 h-2.5 rounded-full bg-red-500 border-2 border-white" />
         </TouchableOpacity>
       </View>
 
       <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.scrollContent}
+        className="flex-1"
+        contentContainerStyle={{ paddingHorizontal: 20 }}
         showsVerticalScrollIndicator={false}
       >
         {/* Stamp Card Section */}
-        <View style={styles.stampCardContainer}>
-          <View style={styles.stampCardHeader}>
+        <View className="bg-white rounded-3xl p-5 border border-gray-100">
+          <View className="flex-row justify-between items-center mb-4">
             <View>
-              <Text style={styles.stampCardTitle}>Damga Kartım</Text>
-              <Text style={styles.stampCardSubtitle}>SADAKAT PROGRAMI</Text>
+              <Text className="text-lg font-bold text-text-main">Damga Kartım</Text>
+              <Text className="text-xs text-gray-400 tracking-wider mt-0.5">SADAKAT PROGRAMI</Text>
             </View>
-            <View style={styles.stampProgress}>
-              <Text style={styles.stampProgressText}>4/6</Text>
+            <View className="bg-primary/40 px-3.5 py-1.5 rounded-full">
+              <Text className="text-sm font-bold text-text-main">4/6</Text>
             </View>
           </View>
 
-          {/* Stamps Grid - 7 stamps per row (6 regular + 1 gift) */}
-          <View style={styles.stampsGrid}>
+          {/* Stamps Grid */}
+          <View className="flex-row justify-between mb-4">
             {[...Array(4)].map((_, i) => (
-              <React.Fragment key={`filled-${i}`}>
-                {renderStampIcon(true)}
-              </React.Fragment>
+              <View key={`f-${i}`} className="w-12 h-12 rounded-full bg-primary items-center justify-center">
+                <MaterialIcons name="local-cafe" size={20} color="#181811" />
+              </View>
             ))}
             {[...Array(2)].map((_, i) => (
-              <React.Fragment key={`empty-${i}`}>
-                {renderStampIcon(false)}
-              </React.Fragment>
+              <View key={`e-${i}`} className="w-12 h-12 rounded-full bg-gray-100 items-center justify-center border border-dashed border-gray-300">
+                <MaterialIcons name="local-cafe" size={20} color="#E0E0E0" />
+              </View>
             ))}
-            {renderStampIcon(false, true)}
+            <View className="w-12 h-12 rounded-full bg-gray-100 items-center justify-center border border-dashed border-gray-300">
+              <MaterialIcons name="card-giftcard" size={20} color="#E0E0E0" />
+            </View>
           </View>
 
           {/* Progress Bar */}
-          <View style={styles.progressBarContainer}>
-            <View style={[styles.progressBar, { width: '66%' }]} />
+          <View className="h-1.5 bg-gray-100 rounded-full mb-4">
+            <View className="h-full bg-primary rounded-full" style={{ width: '66%' }} />
           </View>
 
-          {/* Stamp Card Footer */}
-          <View style={styles.stampCardFooter}>
-            <View style={styles.stampCardMessage}>
-              <MaterialIcons name="bolt" size={18} color={Colors.primary} />
-              <Text style={styles.stampCardMessageText}>2 kahve sonra ücretsiz!</Text>
+          {/* Footer */}
+          <View className="items-center">
+            <View className="flex-row items-center mb-3">
+              <MaterialIcons name="bolt" size={18} color="#f9f506" />
+              <Text className="text-sm font-bold text-text-main ml-1 opacity-50">2 kahve sonra ücretsiz!</Text>
             </View>
             <TouchableOpacity
-              style={styles.viewCardButton}
+              className="flex-row items-center justify-center bg-primary px-6 py-3 rounded-full w-full"
               onPress={handleOpenStampCard}
             >
-              <Text style={styles.viewCardButtonText}>Kartı Görüntüle</Text>
-              <MaterialIcons name="arrow-forward" size={18} color={Colors.textMain} />
+              <Text className="text-md font-bold shadow-lg shadow-primary/50 text-text-main">Kartı Görüntüle</Text>
+              <MaterialIcons name="arrow-forward" size={20} color="#181811" style={{ marginLeft: 6 }} />
             </TouchableOpacity>
           </View>
         </View>
 
         {/* QR Code Shortcut */}
         <TouchableOpacity
-          style={styles.qrShortcutContainer}
+          className="flex-row items-center bg-white rounded-2xl p-4 mt-4 border border-gray-100"
           onPress={() => router.push('/(tabs)/qr-scan')}
           activeOpacity={0.9}
         >
-          <View style={styles.qrShortcutIcon}>
-            <MaterialIcons name="qr-code-2" size={28} color={Colors.textMain} />
+          <View className="w-14 h-14 rounded-full bg-primary shadow-lg shadow-primary/50 items-center justify-center">
+            <MaterialIcons name="qr-code-2" size={28} color="#181811" />
           </View>
-          <View style={styles.qrShortcutContent}>
-            <Text style={styles.qrShortcutTitle}>Damga Kazanmak İçin</Text>
-            <Text style={styles.qrShortcutSubtitle}>QR Kodumu Göster</Text>
+          <View className="flex-1 ml-4">
+            <Text className="text-sm font-bold text-gray-500">Damga Kazanmak İçin</Text>
+            <Text className="text-lg font-bold text-text-main mt-0.5">QR Kodumu Göster</Text>
           </View>
-          <View style={styles.qrShortcutArrow}>
-            <MaterialIcons name="arrow-forward" size={24} color={Colors.gray400} />
+          <View className="w-10 h-10 rounded-full bg-gray-50 items-center justify-center">
+            <MaterialIcons name="arrow-forward" size={24} color="#BDBDBD" />
           </View>
         </TouchableOpacity>
 
         {/* Featured Deal */}
-        <View style={styles.sectionContainer}>
-          <Text style={styles.sectionTitle}>Öne Çıkan Fırsatlar</Text>
+        <View className="mt-6">
+          <Text className="text-xl font-bold text-text-main mb-4">Öne Çıkan Fırsatlar</Text>
           <TouchableOpacity
-            style={styles.heroDealContainer}
+            className="h-52 rounded-3xl overflow-hidden"
             onPress={() => router.push('/(tabs)/rewards')}
             activeOpacity={0.9}
           >
@@ -184,444 +162,58 @@ export default function HomeScreen() {
               source={{
                 uri: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDpWEEnhpkabTmmASK04Boji991clWcWz5M8ZNGv_zyNm6HmE9oBDB9dEF9VB8zb2ZTGkYerPatbOE0SfS4QdSisWKMyug85FYI-gFMs-wqhuUTLZXAl_iaVXGXGMKx4P1-O_JfvvLo-X5AdR2pnlOG0e_yx4qelOqi_mB2atTU5L1BknRrcJvqhf2IkomvqPW8vuWCIFFneGXfj2ApG2XMgCEMkyGuSQHCv4rT5bH59zZtcZoKeFb5S-bKUZfZ9kOgFjP4GpfRF5o',
               }}
-              style={styles.heroDealImage}
+              style={StyleSheet.absoluteFillObject}
               resizeMode="cover"
             />
             <LinearGradient
               colors={['transparent', 'rgba(0,0,0,0.4)', 'rgba(0,0,0,0.8)']}
-              style={styles.heroDealGradient}
+              style={StyleSheet.absoluteFillObject}
             />
-            <View style={styles.heroDealContent}>
-              <View style={styles.heroDealBadge}>
-                <Text style={styles.heroDealBadgeText}>POPÜLER FIRSAT</Text>
+            <View className="flex-1 justify-end p-5">
+              <View className="bg-primary px-3 py-1 rounded-md self-start mb-2">
+                <Text className="text-[10px] font-bold text-text-main tracking-wider">POPÜLER FIRSAT</Text>
               </View>
-              <Text style={styles.heroDealTitle}>
+              <Text className="text-2xl font-bold text-white leading-8">
                 Sabah Kahvesi +{'\n'}Sandviç Fırsatı
               </Text>
-              <Text style={styles.heroDealSubtitle}>
-                Güne lezzetli bir başlangıç yapın!
-              </Text>
-              <TouchableOpacity style={styles.heroDealButton}>
-                <Text style={styles.heroDealButtonText}>Fırsatı Yakala</Text>
-              </TouchableOpacity>
+              <Text className="text-sm text-white/80 mt-1">Güne lezzetli bir başlangıç yapın!</Text>
             </View>
           </TouchableOpacity>
         </View>
 
         {/* Deals Grid */}
-        <View style={styles.dealsGrid}>
+        <View className="flex-row flex-wrap justify-between mt-6">
           {deals.map((deal) => (
-            <TouchableOpacity key={deal.id} style={styles.dealCard} activeOpacity={0.9}>
-              <View style={styles.dealImageContainer}>
-                <Image source={{ uri: deal.image }} style={styles.dealImage} />
+            <TouchableOpacity
+              key={deal.id}
+              className="mb-4 bg-white rounded-2xl overflow-hidden border border-gray-100"
+              style={{ width: CARD_WIDTH }}
+              activeOpacity={0.9}
+            >
+              <View className="relative">
+                <Image source={{ uri: deal.image }} className="w-full h-28" resizeMode="cover" />
                 {deal.tag && (
-                  <View style={styles.dealTag}>
-                    <Text style={styles.dealTagText}>{deal.tag}</Text>
+                  <View className="absolute top-2 left-2 bg-primary px-2 py-0.5 rounded-full">
+                    <Text className="text-[10px] font-bold text-text-main">{deal.tag}</Text>
                   </View>
                 )}
                 {deal.discount && (
-                  <View style={styles.dealDiscount}>
-                    <Text style={styles.dealDiscountText}>{deal.discount}</Text>
+                  <View className="absolute top-2 right-2 bg-red-500 px-2 py-0.5 rounded-full">
+                    <Text className="text-[10px] font-bold text-white">{deal.discount}</Text>
                   </View>
                 )}
               </View>
-              <View style={styles.dealInfo}>
-                <Text style={styles.dealTitle}>{deal.title}</Text>
-                <Text style={styles.dealSubtitle}>{deal.subtitle}</Text>
+              <View className="p-3">
+                <Text className="text-sm font-bold text-text-main" numberOfLines={1}>{deal.title}</Text>
+                <Text className="text-xs text-gray-500 mt-0.5">{deal.subtitle}</Text>
               </View>
             </TouchableOpacity>
           ))}
         </View>
 
         {/* Bottom Spacing for Tab Bar */}
-        <View style={{ height: 100 }} />
+        <View className="h-[100px]" />
       </ScrollView>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.backgroundLight,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    paddingHorizontal: 24,
-    paddingTop: 8,
-    paddingBottom: 16,
-    backgroundColor: 'rgba(248, 248, 245, 0.8)',
-  },
-  greeting: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: Colors.textMain,
-    letterSpacing: -0.5,
-  },
-  subGreeting: {
-    fontSize: 16,
-    color: Colors.gray500,
-    marginTop: 4,
-  },
-  notificationButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: Colors.white,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
-    borderWidth: 1,
-    borderColor: Colors.gray100,
-  },
-  notificationBadge: {
-    position: 'absolute',
-    top: 10,
-    right: 12,
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: Colors.red500,
-    borderWidth: 1,
-    borderColor: Colors.white,
-  },
-  scrollView: {
-    flex: 1,
-  },
-  scrollContent: {
-    paddingHorizontal: 20,
-    paddingTop: 8,
-  },
-  // Stamp Card Styles
-  stampCardContainer: {
-    backgroundColor: Colors.surfaceLight,
-    borderRadius: 20,
-    padding: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.06,
-    shadowRadius: 24,
-    elevation: 4,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.8)',
-  },
-  stampCardHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  stampCardTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: Colors.textMain,
-  },
-  stampCardSubtitle: {
-    fontSize: 11,
-    color: Colors.gray400,
-    fontWeight: '600',
-    letterSpacing: 0.5,
-    marginTop: 2,
-  },
-  stampProgress: {
-    backgroundColor: Colors.primaryLight,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 20,
-  },
-  stampProgressText: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: Colors.textMain,
-  },
-  stampsGrid: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
-    paddingHorizontal: 4,
-  },
-  stampFilled: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: Colors.primary,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: Colors.primary,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  stampEmpty: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: Colors.gray50,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 2,
-    borderStyle: 'dashed',
-    borderColor: Colors.gray200,
-  },
-  progressBarContainer: {
-    height: 6,
-    backgroundColor: Colors.gray100,
-    borderRadius: 3,
-    marginBottom: 24,
-    overflow: 'hidden',
-  },
-  progressBar: {
-    height: '100%',
-    backgroundColor: Colors.primary,
-    borderRadius: 3,
-  },
-  stampCardFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-    gap: 12,
-  },
-  stampCardMessage: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stampCardMessageText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: Colors.gray500,
-  },
-  viewCardButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: Colors.primary,
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderRadius: 24,
-    gap: 8,
-    shadowColor: Colors.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 3,
-  },
-  viewCardButtonText: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: Colors.textMain,
-  },
-  // Section Styles
-  sectionContainer: {
-    marginTop: 32,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: Colors.textMain,
-    marginBottom: 16,
-    paddingHorizontal: 4,
-  },
-  // Hero Deal Styles
-  heroDealContainer: {
-    height: 240,
-    borderRadius: 16,
-    overflow: 'hidden',
-    backgroundColor: Colors.white,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-    elevation: 3,
-    borderWidth: 1,
-    borderColor: Colors.gray100,
-  },
-  heroDealImage: {
-    ...StyleSheet.absoluteFillObject,
-    width: '100%',
-    height: '100%',
-  },
-  heroDealGradient: {
-    ...StyleSheet.absoluteFillObject,
-  },
-  heroDealContent: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    padding: 24,
-  },
-  heroDealBadge: {
-    backgroundColor: Colors.primary,
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-    borderRadius: 4,
-    alignSelf: 'flex-start',
-    marginBottom: 12,
-  },
-  heroDealBadgeText: {
-    fontSize: 10,
-    fontWeight: '700',
-    color: Colors.textMain,
-    letterSpacing: 1,
-  },
-  heroDealTitle: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: Colors.white,
-    marginBottom: 8,
-    textShadowColor: 'rgba(0, 0, 0, 0.3)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 4,
-  },
-  heroDealSubtitle: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: 'rgba(255, 255, 255, 0.9)',
-    marginBottom: 24,
-  },
-  heroDealButton: {
-    backgroundColor: Colors.primary,
-    paddingHorizontal: 24,
-    paddingVertical: 14,
-    borderRadius: 24,
-    alignSelf: 'flex-start',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  heroDealButtonText: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: Colors.textMain,
-  },
-  // Deals Grid Styles
-  dealsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 16,
-    marginTop: 24,
-  },
-  dealCard: {
-    width: (width - 40 - 16) / 2,
-    backgroundColor: Colors.surfaceLight,
-    borderRadius: 16,
-    overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
-    borderWidth: 1,
-    borderColor: Colors.gray100,
-  },
-  dealImageContainer: {
-    height: 144,
-    position: 'relative',
-  },
-  dealImage: {
-    width: '100%',
-    height: '100%',
-  },
-  dealTag: {
-    position: 'absolute',
-    top: 8,
-    right: 8,
-    backgroundColor: 'rgba(249, 245, 6, 0.9)',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 4,
-  },
-  dealTagText: {
-    fontSize: 10,
-    fontWeight: '700',
-    color: Colors.textMain,
-  },
-  dealDiscount: {
-    position: 'absolute',
-    top: 8,
-    right: 8,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 4,
-  },
-  dealDiscountText: {
-    fontSize: 10,
-    fontWeight: '700',
-    color: Colors.textMain,
-  },
-  dealInfo: {
-    padding: 16,
-  },
-  dealTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: Colors.textMain,
-  },
-  dealSubtitle: {
-    fontSize: 12,
-    color: Colors.gray500,
-    marginTop: 4,
-  },
-  // QR Shortcut Styles
-  qrShortcutContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: Colors.surfaceLight,
-    borderRadius: 16,
-    padding: 16,
-    marginTop: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.04,
-    shadowRadius: 16,
-    elevation: 2,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.8)',
-  },
-  qrShortcutIcon: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
-    backgroundColor: Colors.primary,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: Colors.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 3,
-  },
-  qrShortcutContent: {
-    flex: 1,
-    marginLeft: 16,
-  },
-  qrShortcutTitle: {
-    fontSize: 12,
-    color: Colors.gray500,
-    fontWeight: '500',
-  },
-  qrShortcutSubtitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: Colors.textMain,
-    marginTop: 2,
-  },
-  qrShortcutArrow: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: Colors.gray100,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

@@ -1,5 +1,5 @@
-import { Colors } from '@/constants/Colors';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
+import "@/global.css";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
@@ -73,8 +73,8 @@ export default function RootLayout() {
 
   if (!loaded || isOnboarded === null) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Colors.backgroundLight }}>
-        <ActivityIndicator size="large" color={Colors.primary} />
+      <View className="flex-1 justify-center items-center bg-bg-light">
+        <ActivityIndicator size="large" color="#f9f506" />
       </View>
     );
   }

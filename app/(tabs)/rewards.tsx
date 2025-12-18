@@ -1,17 +1,16 @@
+import { MaterialIcons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import {
-    View,
-    Text,
-    StyleSheet,
-    ScrollView,
-    TouchableOpacity,
-    Image,
     Dimensions,
+    Image,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { LinearGradient } from 'expo-linear-gradient';
-import { MaterialIcons } from '@expo/vector-icons';
-import { Colors } from '@/constants/Colors';
 
 const { width } = Dimensions.get('window');
 
@@ -44,100 +43,109 @@ const dealItems = [
 
 export default function RewardsScreen() {
     return (
-        <View style={styles.container}>
-            <SafeAreaView edges={['top']} style={styles.safeArea}>
+        <View className="flex-1 bg-[#FFFDF7]">
+            <SafeAreaView edges={['top']} className="bg-[#FFFDF7]">
                 {/* Header */}
-                <View style={styles.header}>
-                    <Text style={styles.headerTitle}>Fırsatlar</Text>
-                    <Text style={styles.headerSubtitle}>Sana özel indirimler ve kampanyalar.</Text>
+                <View className="px-6 pt-4 pb-5">
+                    <Text className="text-4xl font-bold text-brown-dark tracking-tight">Fırsatlar</Text>
+                    <Text className="text-[15px] font-medium text-[#5D4037] mt-1.5 opacity-80">
+                        Sana özel indirimler ve kampanyalar.
+                    </Text>
                 </View>
             </SafeAreaView>
 
             <ScrollView
-                style={styles.scrollView}
-                contentContainerStyle={styles.scrollContent}
+                className="flex-1"
+                contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 16 }}
                 showsVerticalScrollIndicator={false}
             >
                 {/* Featured Hero Deal */}
-                <View style={styles.heroDealContainer}>
+                <View className="h-[360px] rounded-[40px] overflow-hidden">
                     <Image
                         source={{
                             uri: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA9tTxRhfyzvqgP7PIYSPXR35uYwGayIFHv_vb3tduYe_tGP8E9biSQDR-vVONzG724L0B8oJsmtHOwGYfgIzx4cNqlmA20YJNsjFZguvQsFX2_sS06nctSdKH2ZT6PN2xTDuek3ozD2bQVYDXaY9_mq6so8fyirKEF7x6MSH621bTVSGIvi63k9uQpr0Pga1oMVEV36AL9UhZ6bAR2eP-wtRVhUkn2hE5xlBe9rrvQ07TDJ1ZzWurR3bKDVQLD-nTX9GLdwiHx6Is',
                         }}
-                        style={styles.heroDealImage}
+                        style={StyleSheet.absoluteFillObject}
                         resizeMode="cover"
                     />
                     <LinearGradient
                         colors={['transparent', 'rgba(62, 39, 35, 0.6)', 'rgba(62, 39, 35, 0.95)']}
-                        style={styles.heroDealGradient}
+                        style={StyleSheet.absoluteFillObject}
                     />
-                    <View style={styles.heroDealContent}>
-                        <View style={styles.heroDealBadges}>
-                            <View style={styles.heroDealBadgeOrange}>
-                                <Text style={styles.heroDealBadgeText}>SINIRLI SÜRE</Text>
+                    <View className="flex-1 justify-end p-8">
+                        <View className="flex-row gap-3 mb-8">
+                            <View className="bg-orange shadow-md shadow-black/20 px-3.5 py-1.5 rounded-full">
+                                <Text className="text-[11px] font-bold text-white tracking-wider">SINIRLI SÜRE</Text>
                             </View>
-                            <View style={styles.heroDealBadgeWhite}>
-                                <Text style={styles.heroDealBadgeTextDark}>POPÜLER</Text>
+                            <View className="bg-white/10 border border-white/20 px-3.5 py-1.5 rounded-full">
+                                <Text className="text-[11px] font-bold text-white tracking-wider">POPÜLER</Text>
                             </View>
                         </View>
-                        <Text style={styles.heroDealTitle}>Tatlı + Kahve Menüsü</Text>
-                        <Text style={styles.heroDealSubtitle}>
+                        <Text className="text-4xl shadow-sm shadow-black/60 font-bold text-white mb-3 leading-10">Tatlı + Kahve Menüsü</Text>
+                        <Text className="text-base font-medium text-white/90 mb-8 leading-6">
                             Seçeceğin bir kahve ve günlük taze cheesecake sadece{' '}
-                            <Text style={styles.heroDealPrice}>200 TL</Text>.
+                            <Text className="text-[#FFB74D] font-bold">200 TL</Text>.
                         </Text>
-                        <TouchableOpacity style={styles.heroDealButton} activeOpacity={0.9}>
-                            <Text style={styles.heroDealButtonText}>Fırsatı Yakala</Text>
-                            <MaterialIcons name="arrow-forward" size={20} color={Colors.orange} />
+                        <TouchableOpacity
+                            className="bg-[#FFFDF7] flex-row items-center justify-center px-6 py-4 rounded-2xl"
+                            activeOpacity={0.9}
+                        >
+                            <Text className="text-base font-bold text-brown-dark">Fırsatı Yakala</Text>
+                            <MaterialIcons name="arrow-forward" size={20} color="#E65100" style={{ marginLeft: 8 }} />
                         </TouchableOpacity>
                     </View>
                 </View>
 
                 {/* Other Deals Section */}
-                <View style={styles.dealsSection}>
-                    <View style={styles.dealsSectionHeader}>
-                        <Text style={styles.dealsSectionTitle}>Diğer Fırsatlar</Text>
-                        <TouchableOpacity style={styles.seeAllButton}>
-                            <Text style={styles.seeAllButtonText}>Tümünü Gör</Text>
-                            <MaterialIcons name="chevron-right" size={18} color={Colors.orange} />
+                <View className="mt-8">
+                    <View className="flex-row justify-between items-center px-1 mb-5">
+                        <Text className="text-[22px] font-bold text-brown-dark">Diğer Fırsatlar</Text>
+                        <TouchableOpacity className="flex-row items-center py-1 px-2 rounded-lg">
+                            <Text className="text-[13px] font-semibold text-orange">Tümünü Gör</Text>
+                            <MaterialIcons name="chevron-right" size={18} color="#E65100" />
                         </TouchableOpacity>
                     </View>
 
                     {/* Deal Items */}
                     {dealItems.map((item) => (
-                        <TouchableOpacity key={item.id} style={styles.dealItem} activeOpacity={0.9}>
-                            <Image source={{ uri: item.image }} style={styles.dealItemImage} />
-                            <View style={styles.dealItemContent}>
-                                <View style={styles.dealItemHeader}>
-                                    <Text style={styles.dealItemTitle}>{item.title}</Text>
+                        <TouchableOpacity
+                            key={item.id}
+                            className="flex-row bg-white rounded-[28px] p-4 mb-5 border border-[#EBE5DA]/50"
+                            activeOpacity={0.9}
+                        >
+                            <Image source={{ uri: item.image }} className="w-[104px] h-[104px] rounded-2xl" />
+                            <View className="flex-1 ml-5 justify-between">
+                                <View className="flex-row items-start justify-between">
+                                    <Text className="text-lg font-bold text-brown-dark flex-1">{item.title}</Text>
                                     {item.discount && (
-                                        <View style={styles.dealItemDiscountBadge}>
-                                            <Text style={styles.dealItemDiscountText}>{item.discount}</Text>
+                                        <View className="bg-orange-100 px-2.5 py-1 rounded-full bg-orange/10">
+                                            <Text className="text-[11px] font-bold text-orange">{item.discount}</Text>
                                         </View>
                                     )}
                                     {item.tag && (
-                                        <View style={[styles.dealItemTagBadge, item.tagColor === 'blue' && styles.tagBadgeBlue]}>
-                                            <Text style={[styles.dealItemTagText, item.tagColor === 'blue' && styles.tagTextBlue]}>
+                                        <View className={`px-2.5 py-1 rounded-full ${item.tagColor === 'blue' ? 'bg-blue-50 border border-blue-300/50' : ''}`}>
+                                            <Text className={`text-[11px] font-bold ${item.tagColor === 'blue' ? 'text-blue-600' : ''}`}>
                                                 {item.tag}
                                             </Text>
                                         </View>
                                     )}
                                 </View>
-                                <Text style={styles.dealItemDescription} numberOfLines={2}>
+                                <Text className="text-[13px] font-medium text-[#5D4037] leading-5 mt-1.5" numberOfLines={2}>
                                     {item.description}
                                 </Text>
-                                <View style={styles.dealItemFooter}>
+                                <View className="flex-row justify-between items-center mt-2">
                                     {item.price ? (
-                                        <Text style={styles.dealItemPrice}>{item.price}</Text>
+                                        <Text className="text-[19px] font-bold text-brown-dark">{item.price}</Text>
                                     ) : (
-                                        <Text style={styles.dealItemPriceLabel}>{item.priceLabel}</Text>
+                                        <Text className="text-[13px] font-bold text-[#5D4037]">{item.priceLabel}</Text>
                                     )}
                                     {item.price ? (
-                                        <TouchableOpacity style={styles.dealItemAddButton}>
-                                            <MaterialIcons name="add" size={20} color={Colors.brownDark} />
+                                        <TouchableOpacity className="w-9 h-9 rounded-full bg-[#F5F0E6] items-center justify-center">
+                                            <MaterialIcons name="add" size={20} color="#3E2723" />
                                         </TouchableOpacity>
                                     ) : (
-                                        <TouchableOpacity style={styles.dealItemViewButton}>
-                                            <Text style={styles.dealItemViewButtonText}>İncele</Text>
+                                        <TouchableOpacity className="h-9 px-4 rounded-full bg-[#F5F0E6] items-center justify-center">
+                                            <Text className="text-[13px] font-bold text-brown-dark">İncele</Text>
                                         </TouchableOpacity>
                                     )}
                                 </View>
@@ -147,287 +155,8 @@ export default function RewardsScreen() {
                 </View>
 
                 {/* Bottom Spacing */}
-                <View style={{ height: 120 }} />
+                <View className="h-[120px]" />
             </ScrollView>
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: Colors.rewardsBg,
-    },
-    safeArea: {
-        backgroundColor: Colors.rewardsBg,
-    },
-    header: {
-        paddingHorizontal: 24,
-        paddingTop: 16,
-        paddingBottom: 20,
-    },
-    headerTitle: {
-        fontSize: 34,
-        fontWeight: '700',
-        color: Colors.brownDark,
-        letterSpacing: -0.5,
-    },
-    headerSubtitle: {
-        fontSize: 15,
-        fontWeight: '500',
-        color: Colors.brownMedium,
-        marginTop: 6,
-        opacity: 0.8,
-    },
-    scrollView: {
-        flex: 1,
-    },
-    scrollContent: {
-        paddingHorizontal: 20,
-        paddingTop: 16,
-    },
-    // Hero Deal
-    heroDealContainer: {
-        height: 360,
-        borderRadius: 40,
-        overflow: 'hidden',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 10 },
-        shadowOpacity: 0.2,
-        shadowRadius: 20,
-        elevation: 10,
-    },
-    heroDealImage: {
-        ...StyleSheet.absoluteFillObject,
-        width: '100%',
-        height: '100%',
-    },
-    heroDealGradient: {
-        ...StyleSheet.absoluteFillObject,
-    },
-    heroDealContent: {
-        flex: 1,
-        justifyContent: 'flex-end',
-        padding: 32,
-    },
-    heroDealBadges: {
-        flexDirection: 'row',
-        gap: 12,
-        marginBottom: 16,
-    },
-    heroDealBadgeOrange: {
-        backgroundColor: Colors.orange,
-        paddingHorizontal: 14,
-        paddingVertical: 6,
-        borderRadius: 20,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 4,
-    },
-    heroDealBadgeWhite: {
-        backgroundColor: 'rgba(255, 255, 255, 0.1)',
-        borderWidth: 1,
-        borderColor: 'rgba(255, 255, 255, 0.2)',
-        paddingHorizontal: 14,
-        paddingVertical: 6,
-        borderRadius: 20,
-    },
-    heroDealBadgeText: {
-        fontSize: 11,
-        fontWeight: '700',
-        color: Colors.white,
-        letterSpacing: 1,
-    },
-    heroDealBadgeTextDark: {
-        fontSize: 11,
-        fontWeight: '700',
-        color: Colors.white,
-        letterSpacing: 1,
-    },
-    heroDealTitle: {
-        fontSize: 36,
-        fontWeight: '700',
-        color: Colors.white,
-        marginBottom: 12,
-        lineHeight: 40,
-        letterSpacing: -0.5,
-        textShadowColor: 'rgba(0, 0, 0, 0.3)',
-        textShadowOffset: { width: 0, height: 2 },
-        textShadowRadius: 4,
-    },
-    heroDealSubtitle: {
-        fontSize: 16,
-        fontWeight: '500',
-        color: 'rgba(255, 255, 255, 0.9)',
-        marginBottom: 32,
-        lineHeight: 24,
-    },
-    heroDealPrice: {
-        color: '#FFB74D',
-        fontWeight: '700',
-    },
-    heroDealButton: {
-        backgroundColor: Colors.rewardsBg,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingHorizontal: 24,
-        paddingVertical: 18,
-        borderRadius: 20,
-        gap: 8,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.15,
-        shadowRadius: 8,
-        elevation: 5,
-    },
-    heroDealButtonText: {
-        fontSize: 16,
-        fontWeight: '700',
-        color: Colors.brownDark,
-    },
-    // Deals Section
-    dealsSection: {
-        marginTop: 32,
-    },
-    dealsSectionHeader: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingHorizontal: 4,
-        marginBottom: 20,
-    },
-    dealsSectionTitle: {
-        fontSize: 22,
-        fontWeight: '700',
-        color: Colors.brownDark,
-        letterSpacing: -0.3,
-    },
-    seeAllButton: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingVertical: 4,
-        paddingHorizontal: 8,
-        borderRadius: 8,
-    },
-    seeAllButtonText: {
-        fontSize: 13,
-        fontWeight: '600',
-        color: Colors.orange,
-    },
-    // Deal Item
-    dealItem: {
-        flexDirection: 'row',
-        backgroundColor: Colors.white,
-        borderRadius: 28,
-        padding: 16,
-        marginBottom: 20,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.08,
-        shadowRadius: 16,
-        elevation: 4,
-        borderWidth: 1,
-        borderColor: 'rgba(235, 229, 218, 0.3)',
-    },
-    dealItemImage: {
-        width: 104,
-        height: 104,
-        borderRadius: 16,
-    },
-    dealItemContent: {
-        flex: 1,
-        marginLeft: 20,
-        justifyContent: 'space-between',
-    },
-    dealItemHeader: {
-        flexDirection: 'row',
-        alignItems: 'flex-start',
-        justifyContent: 'space-between',
-    },
-    dealItemTitle: {
-        fontSize: 18,
-        fontWeight: '700',
-        color: Colors.brownDark,
-        flex: 1,
-    },
-    dealItemDiscountBadge: {
-        backgroundColor: 'rgba(255, 237, 213, 1)',
-        paddingHorizontal: 10,
-        paddingVertical: 4,
-        borderRadius: 20,
-        borderWidth: 1,
-        borderColor: 'rgba(255, 237, 213, 1)',
-    },
-    dealItemDiscountText: {
-        fontSize: 11,
-        fontWeight: '700',
-        color: Colors.orange,
-    },
-    dealItemTagBadge: {
-        paddingHorizontal: 10,
-        paddingVertical: 4,
-        borderRadius: 20,
-    },
-    tagBadgeBlue: {
-        backgroundColor: Colors.blue50,
-        borderWidth: 1,
-        borderColor: 'rgba(147, 197, 253, 0.5)',
-    },
-    dealItemTagText: {
-        fontSize: 11,
-        fontWeight: '700',
-    },
-    tagTextBlue: {
-        color: Colors.blue600,
-    },
-    dealItemDescription: {
-        fontSize: 13,
-        fontWeight: '500',
-        color: Colors.brownMedium,
-        lineHeight: 20,
-        marginTop: 6,
-    },
-    dealItemFooter: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginTop: 8,
-    },
-    dealItemPrice: {
-        fontSize: 19,
-        fontWeight: '700',
-        color: Colors.brownDark,
-    },
-    dealItemPriceLabel: {
-        fontSize: 13,
-        fontWeight: '700',
-        color: Colors.brownMedium,
-    },
-    dealItemAddButton: {
-        width: 36,
-        height: 36,
-        borderRadius: 18,
-        backgroundColor: '#F5F0E6',
-        alignItems: 'center',
-        justifyContent: 'center',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.05,
-        shadowRadius: 4,
-    },
-    dealItemViewButton: {
-        height: 36,
-        paddingHorizontal: 16,
-        borderRadius: 18,
-        backgroundColor: '#F5F0E6',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    dealItemViewButtonText: {
-        fontSize: 13,
-        fontWeight: '700',
-        color: Colors.brownDark,
-    },
-});

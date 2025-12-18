@@ -1,8 +1,7 @@
-import { Colors } from '@/constants/Colors';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 
 type TabIconName = 'home' | 'stars' | 'qr-code-scanner' | 'person';
 
@@ -11,7 +10,7 @@ function TabBarIcon({ name, focused }: { name: TabIconName; focused: boolean }) 
     <MaterialIcons
       name={name}
       size={26}
-      color={focused ? Colors.textMain : Colors.gray400}
+      color={focused ? '#181811' : '#BDBDBD'}
       style={focused ? { transform: [{ scale: 1.1 }] } : undefined}
     />
   );
@@ -26,8 +25,8 @@ function CustomTabBar({ state, descriptors, navigation }: any) {
   ];
 
   return (
-    <View style={styles.tabBarContainer}>
-      <View style={styles.tabBar}>
+    <View className="absolute bottom-0 left-0 right-0 bg-white/95 border-t border-gray-100 shadow-sm">
+      <View className="flex-row h-[76px] px-2 pb-5 items-center justify-around">
         {state.routes.map((route: any, index: number) => {
           const tabInfo = tabs[index];
           const isFocused = state.index === index;
@@ -47,17 +46,17 @@ function CustomTabBar({ state, descriptors, navigation }: any) {
           return (
             <TouchableOpacity
               key={route.key}
-              style={styles.tabItem}
+              className="flex-1 items-center justify-center h-full gap-1 relative"
               onPress={onPress}
               activeOpacity={0.7}
             >
-              {isFocused && <View style={styles.activeIndicator} />}
+              {isFocused && (
+                <View className="absolute top-0 w-8 h-[3px] bg-text-main rounded-b-sm" />
+              )}
               <TabBarIcon name={tabInfo.icon} focused={isFocused} />
               <Text
-                style={[
-                  styles.tabLabel,
-                  { color: isFocused ? Colors.textMain : Colors.gray400 },
-                ]}
+                className={`text-[10px] font-bold tracking-wide ${isFocused ? 'text-text-main' : 'text-gray-400'
+                  }`}
               >
                 {tabInfo.label}
               </Text>
@@ -104,54 +103,3 @@ export default function TabLayout() {
     </Tabs>
   );
 }
-
-const styles = StyleSheet.create({
-  tabBarContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-    borderTopWidth: 1,
-    borderTopColor: Colors.gray100,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: -5 },
-    shadowOpacity: 0.03,
-    shadowRadius: 20,
-    elevation: 10,
-  },
-  tabBar: {
-    flexDirection: 'row',
-    height: 76,
-    paddingHorizontal: 8,
-    paddingBottom: 20,
-    alignItems: 'center',
-    justifyContent: 'space-around',
-  },
-  tabItem: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '100%',
-    gap: 4,
-    position: 'relative',
-  },
-  activeIndicator: {
-    position: 'absolute',
-    top: 0,
-    width: 32,
-    height: 3,
-    backgroundColor: Colors.textMain,
-    borderBottomLeftRadius: 3,
-    borderBottomRightRadius: 3,
-    shadowColor: Colors.textMain,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.5,
-    shadowRadius: 8,
-  },
-  tabLabel: {
-    fontSize: 10,
-    fontWeight: '700',
-    letterSpacing: 0.5,
-  },
-});
